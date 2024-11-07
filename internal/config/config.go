@@ -7,6 +7,7 @@ import (
 
 type Config struct {
 	GRPC GRPCConfig `yaml:"grpc"`
+	Host string     `yaml:"host"`
 }
 type GRPCConfig struct {
 	InfoPort int           `yaml:"infoport"`

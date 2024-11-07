@@ -1,6 +1,8 @@
 package grpc_connection
 
 import (
+	"Http-gateway/internal/config"
+	"Http-gateway/pkg/singleton"
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -8,7 +10,8 @@ import (
 )
 
 func ConnectGrpcService(grpcport int) (*grpc.ClientConn, error) {
-	address := fmt.Sprintf("localhost:%d", grpcport)
+	cfg, _ := singleton.GetAndConvertSingleton[config.Config]("config")
+	address := fmt.Sprintf("%s:%d", cfg.Host, grpcport)
 	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
