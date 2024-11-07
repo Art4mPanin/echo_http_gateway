@@ -1,0 +1,4 @@
+grpc:
+  infoport: 8081
+  authport: 8080
+  timeout: 30

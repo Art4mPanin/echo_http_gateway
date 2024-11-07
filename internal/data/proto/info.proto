@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package info;
+
+option go_package = "/info;info";
+
+service Info {
+  rpc CreateInfo (CreateInfoRequest) returns (CreateInfoResponse);
+
+
+  //  todo: ping
+}
+
+message CreateInfoRequest {
+  string smt = 1;
+}
+
+message CreateInfoResponse {
+  int32 id = 1;
+  string smt = 2;
+}

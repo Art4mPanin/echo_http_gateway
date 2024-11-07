@@ -1,0 +1,258 @@
+definitions:
+  auth.GetMeResponse:
+    properties:
+      user:
+        $ref: '#/definitions/auth.User'
+    type: object
+  auth.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/auth.User'
+    type: object
+  auth.RefreshResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  auth.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  auth.RegisterResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/auth.User'
+    type: object
+  auth.User:
+    properties:
+      email:
+        type: string
+      hashed_password:
+        type: string
+      id:
+        type: integer
+      is_superuser:
+        type: boolean
+      username:
+        type: string
+    type: object
+  auth.ValidateResponse:
+    properties:
+      valid:
+        type: boolean
+    type: object
+  info.CreateInfoRequest:
+    properties:
+      smt:
+        type: string
+    type: object
+  info.CreateInfoResponse:
+    properties:
+      id:
+        type: integer
+      smt:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample server Petstore server.
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /info:
+    post:
+      consumes:
+      - application/json
+      description: Возвращает строку и айди
+      parameters:
+      - description: Запрос создания информации
+        in: body
+        name: smtrequest
+        required: true
+        schema:
+          $ref: '#/definitions/info.CreateInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/info.CreateInfoResponse'
+        "400":
+          description: Неверный запрос
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - JWTBearer: []
+      summary: Создание информации
+      tags:
+      - info
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Авторизация пользователя
+      parameters:
+      - description: Login data
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+        "400":
+          description: Неверный запрос
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Вход
+      tags:
+      - auth
+  /me:
+    get:
+      consumes:
+      - application/json
+      description: Получение данных текущего пользователя по токену аутентификации
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.GetMeResponse'
+        "400":
+          description: Неверный запрос
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - JWTBearer: []
+      summary: Получить информацию о пользователе
+      tags:
+      - auth
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: Обновляет токены доступа и рефреш токены
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RefreshResponse'
+        "400":
+          description: Неверный запрос
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - JWTBearer: []
+      summary: Обновление токена
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Регистрирует нового пользователя с указанными данными
+      parameters:
+      - description: Register data
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+        "400":
+          description: Неверный запрос
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Регистрация пользователя
+      tags:
+      - auth
+  /validate:
+    post:
+      consumes:
+      - application/json
+      description: Проверка валидности токена JWT
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.ValidateResponse'
+        "400":
+          description: Неверный запрос
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      security:
+      - JWTBearer: []
+      summary: Валидация токена
+      tags:
+      - auth
+securityDefinitions:
+  JWTBearer:
+    description: JWT Bearer authentication thru Auth GRPC
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
